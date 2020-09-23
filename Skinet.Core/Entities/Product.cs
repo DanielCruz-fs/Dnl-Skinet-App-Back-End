@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Skinet.Api.Entities
+namespace Skinet.Core.Entities
 {
     public class Product
     {

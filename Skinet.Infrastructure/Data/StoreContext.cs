@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Skinet.Api.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Skinet.Core.Entities;
 
-namespace Skinet.Api.Data
+namespace Skinet.Infrastructure.Data
 {
     public class StoreContext : DbContext
     {
