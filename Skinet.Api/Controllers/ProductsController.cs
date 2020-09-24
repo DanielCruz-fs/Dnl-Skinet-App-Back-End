@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Skinet.Core.Interfaces;
 
 namespace Skinet.Api.Controllers
 {
@@ -11,16 +12,24 @@ namespace Skinet.Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet]
-        public string GetProducts()
+        private readonly IProductRepository productRepository;
+
+        public ProductsController(IProductRepository productRepository)
         {
-            return "this is the list of all products";
+            this.productRepository = productRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProducts()
+        {
+            var products = await this.productRepository.GetProductsAsync();
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public object GetProductId(int id)
+        public async Task<IActionResult> GetProductId(int id)
         {
-            return new { Id = id, ProductTitle = "Pepper" };
+            return Ok(await this.productRepository.GetProductByIdAsync(id));
         }
     }
 }
