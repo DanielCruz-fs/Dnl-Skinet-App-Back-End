@@ -26,6 +26,8 @@ namespace Skinet.Api
             services.AddDbContext<StoreContext>(options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IProductRepository, ProductRepository>();
+            // Injecting a generic service
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
