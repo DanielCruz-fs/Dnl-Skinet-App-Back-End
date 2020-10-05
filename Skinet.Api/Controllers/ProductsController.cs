@@ -31,5 +31,17 @@ namespace Skinet.Api.Controllers
         {
             return Ok(await this.productRepository.GetProductByIdAsync(id));
         }
+
+        [HttpGet("brands")]
+        public async Task<IActionResult> GetProductBrands()
+        {
+            return Ok(await this.productRepository.GetProductBrandsAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<IActionResult> GetProductTypes()
+        {
+            return Ok(await this.productRepository.GetProductTypesAsync());
+        }
     }
 }
