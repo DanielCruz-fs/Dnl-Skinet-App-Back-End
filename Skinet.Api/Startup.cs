@@ -37,6 +37,7 @@ namespace Skinet.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // In this method the order is important
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -45,6 +46,9 @@ namespace Skinet.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            //Serving static content from API
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
