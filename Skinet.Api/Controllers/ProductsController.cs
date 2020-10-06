@@ -40,7 +40,7 @@ namespace Skinet.Api.Controllers
             //var products = await this.productRepository.GetProductsAsync();
 
             // With specification pattern
-            var spec = new ProductsWithTypesAndBrands();
+            var spec = new ProductsWithTypesAndBrandsSpecification();
             var products = await this.productRepo.ListAsync(spec);
             return Ok(products);
         }
@@ -48,7 +48,11 @@ namespace Skinet.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductId(int id)
         {
-            return Ok(await this.productRepository.GetProductByIdAsync(id));
+            //return Ok(await this.productRepository.GetProductByIdAsync(id));
+
+            // With specification pattern
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
+            return Ok(await this.productRepo.GetEntityWithSpec(spec));
         }
 
         [HttpGet("brands")]
