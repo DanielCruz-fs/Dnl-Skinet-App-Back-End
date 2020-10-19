@@ -12,9 +12,7 @@ using Skinet.Core.Specifications;
 
 namespace Skinet.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController 
     {
         private readonly IProductRepository productRepository;
         private readonly IGenericRepository<Product> productRepo;
