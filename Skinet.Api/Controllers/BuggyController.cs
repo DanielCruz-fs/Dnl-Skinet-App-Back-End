@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Skinet.Api.Errors;
 using Skinet.Infrastructure.Data;
 
 namespace Skinet.Api.Controllers
@@ -23,7 +24,7 @@ namespace Skinet.Api.Controllers
             var thing = this.store.Products.Find(44);
             if (thing == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
 
             return Ok();
@@ -40,7 +41,7 @@ namespace Skinet.Api.Controllers
         [HttpGet("badrequest")]
         public IActionResult GetBadRequest()
         {
-            return BadRequest();
+            return BadRequest(new ApiResponse(400));
         }
 
         [HttpGet("badrequest/{id}")]

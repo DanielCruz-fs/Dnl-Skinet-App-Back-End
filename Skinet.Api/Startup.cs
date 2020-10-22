@@ -43,6 +43,9 @@ namespace Skinet.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            // Handle a custom error response when we do not have that end point
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
