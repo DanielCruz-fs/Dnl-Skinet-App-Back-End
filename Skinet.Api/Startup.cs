@@ -12,6 +12,7 @@ using Skinet.Api.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Skinet.Api.Errors;
+using Skinet.Api.Extensions;
 
 namespace Skinet.Api
 {
@@ -33,29 +34,12 @@ namespace Skinet.Api
 
             services.AddDbContext<StoreContext>(options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            // Injecting a generic service
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             // Injecting automapper, it is different 'cause its version 8.1
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            // order exception after add controllers in order to catch the model state validation
-            services.Configure<ApiBehaviorOptions>(options => 
-            {
-                options.InvalidModelStateResponseFactory = actionContext =>
-                {
-                    var errors = actionContext.ModelState.Where(e => e.Value.Errors.Count > 0)
-                                                         .SelectMany(x => x.Value.Errors)
-                                                         .Select(x => x.ErrorMessage).ToArray();
+            // Call custom class to clean up ConfigureServices
+            services.AddApplicationServices();
 
-                    var errorResponse = new ApiValidationErrorResponse
-                    {
-                        Errors = errors
-                    };
-
-                    return new BadRequestObjectResult(errorResponse);
-                };
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
