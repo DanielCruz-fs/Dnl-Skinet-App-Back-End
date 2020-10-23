@@ -9,6 +9,9 @@ using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 using AutoMapper;
 using Skinet.Api.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Skinet.Api.Errors;
 
 namespace Skinet.Api
 {
@@ -24,8 +27,10 @@ namespace Skinet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // In this method the order is not important but there is one exception
+
             services.AddControllers();
-            
+
             services.AddDbContext<StoreContext>(options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -33,6 +38,24 @@ namespace Skinet.Api
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             // Injecting automapper, it is different 'cause its version 8.1
             services.AddAutoMapper(typeof(MappingProfiles));
+
+            // order exception after add controllers in order to catch the model state validation
+            services.Configure<ApiBehaviorOptions>(options => 
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState.Where(e => e.Value.Errors.Count > 0)
+                                                         .SelectMany(x => x.Value.Errors)
+                                                         .Select(x => x.ErrorMessage).ToArray();
+
+                    var errorResponse = new ApiValidationErrorResponse
+                    {
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

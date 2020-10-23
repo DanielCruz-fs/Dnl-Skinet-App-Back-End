@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 namespace Skinet.Api.Middleware
 {
     /// <summary>
-    /// This is a middleware to show errors in production mode
+    /// This is a middleware to show any kind of errors in production mode
+    /// if there is an error duration compilation this is the reason we have nice error response
+    /// to display in our client side application
     /// </summary>
     public class ExceptionMiddleware
     {

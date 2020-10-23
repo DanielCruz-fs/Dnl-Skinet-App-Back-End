@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skinet.Api.Dtos;
+using Skinet.Api.Errors;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
@@ -81,6 +82,7 @@ namespace Skinet.Api.Controllers
             //    ProductType = product.ProductType.Name
             //});
 
+            if (product == null) return NotFound(new ApiResponse(404));
             return Ok(this.mapper.Map<Product, ProductToReturnDto>(product));
         }
 

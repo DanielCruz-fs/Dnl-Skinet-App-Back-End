@@ -22,12 +22,15 @@ namespace Skinet.Api.Controllers
         public IActionResult GetNotFoundRequest()
         {
             var thing = this.store.Products.Find(44);
+            // For test global error hadling format response
+            //throw new ArgumentException("xd error")
+
             if (thing == null)
             {
                 return NotFound(new ApiResponse(404));
             }
 
-            return Ok();
+            return Ok(thing);
         }
 
         [HttpGet("servererror")]
