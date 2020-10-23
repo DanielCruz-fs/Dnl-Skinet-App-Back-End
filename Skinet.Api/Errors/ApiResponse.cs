@@ -7,13 +7,14 @@ namespace Skinet.Api.Errors
 {
     public class ApiResponse
     {
-        public ApiResponse(int statusCode, string message = null)
-        {
-            StatusCode = statusCode;
-            Message = message ?? this.GetDefaultMessageForStatusCode(StatusCode);
-        }
         public int StatusCode { get; set; }
         public string Message { get; set; }
+
+        public ApiResponse(int statusCode, string message = null)
+        {
+            this.StatusCode = statusCode;
+            this.Message = message ?? this.GetDefaultMessageForStatusCode(StatusCode);
+        }
 
         /// <summary>
         /// Generates a custom error response message yoda style

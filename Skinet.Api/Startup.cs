@@ -8,6 +8,7 @@ using Skinet.Api.Helpers;
 using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 using AutoMapper;
+using Skinet.Api.Middleware;
 
 namespace Skinet.Api
 {
@@ -38,10 +39,13 @@ namespace Skinet.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // In this method the order is important
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+
+            // USING OUR OWN MIDDLEWARE TO HANDLE CUSTOME ERRORS AND EXCEPTIONS
+            app.UseMiddleware<ExceptionMiddleware>();
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
 
             // Handle a custom error response when we do not have that end point
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
