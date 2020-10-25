@@ -8,7 +8,13 @@ namespace Skinet.Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpecification(string sort)
+        public ProductsWithTypesAndBrandsSpecification(string sort, int? brandId, int? typeId)
+            // Super advanced using of logical operators
+            : base(
+                  // Same as: x.ProductBrand.Id == brandId && x.ProductType.Id == typeId
+                  x => (!brandId.HasValue || x.ProductBrand.Id == brandId) &&
+                       (!typeId.HasValue || x.ProductType.Id == typeId)
+            )
         {
             this.AddInclude(x => x.ProductType);
             this.AddInclude(x => x.ProductBrand);
