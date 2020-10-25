@@ -63,7 +63,7 @@ namespace Skinet.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductId(int id)
+        public async Task<IActionResult> GetProductById(int id)
         {
             //return Ok(await this.productRepository.GetProductByIdAsync(id));
 
