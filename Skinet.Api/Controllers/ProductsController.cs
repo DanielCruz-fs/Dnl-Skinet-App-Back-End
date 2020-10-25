@@ -40,12 +40,12 @@ namespace Skinet.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts(string sort)
         {
             //var products = await this.productRepository.GetProductsAsync();
 
             // With specification pattern
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(sort);
             var products = await this.productRepo.ListAsync(spec);
 
             // Without automapper
