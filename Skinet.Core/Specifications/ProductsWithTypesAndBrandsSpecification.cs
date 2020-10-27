@@ -8,31 +8,36 @@ namespace Skinet.Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpecification(string sort, int? brandId, int? typeId)
+        public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productSpecParams)
             // Super advanced using of logical operators
             : base(
                   // Same as: x.ProductBrand.Id == brandId && x.ProductType.Id == typeId
-                  x => (!brandId.HasValue || x.ProductBrand.Id == brandId) &&
-                       (!typeId.HasValue || x.ProductType.Id == typeId)
+                  x => (!productSpecParams.BrandId.HasValue || x.ProductBrand.Id == productSpecParams.BrandId) &&
+                       (!productSpecParams.TypeId.HasValue || x.ProductType.Id == productSpecParams.TypeId)
             )
         {
             this.AddInclude(x => x.ProductType);
             this.AddInclude(x => x.ProductBrand);
             this.AddOrderBy(x => x.Name);
+            // -1 'cause at page number one we do not want to skip anything
+            this.ApplyPaging(productSpecParams.PageSize * (productSpecParams.PageIndex - 1), productSpecParams.PageSize);
 
-            switch (sort)
+            if (!string.IsNullOrEmpty(productSpecParams.Sort))
             {
-                case "priceAsc":
-                    this.AddOrderBy(x => x.Price);
-                    break;
+                switch (productSpecParams.Sort)
+                {
+                    case "priceAsc":
+                        this.AddOrderBy(x => x.Price);
+                        break;
 
-                case "priceDesc":
-                    this.AddOrderByDescending(x => x.Price);
-                    break;
+                    case "priceDesc":
+                        this.AddOrderByDescending(x => x.Price);
+                        break;
 
-                default:
-                    this.AddOrderBy(x => x.Name);
-                    break;
+                    default:
+                        this.AddOrderBy(x => x.Name);
+                        break;
+                }
             }
         }
 

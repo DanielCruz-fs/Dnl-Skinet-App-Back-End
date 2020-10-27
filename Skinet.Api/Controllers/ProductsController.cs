@@ -13,7 +13,7 @@ using Skinet.Core.Specifications;
 
 namespace Skinet.Api.Controllers
 {
-    public class ProductsController : BaseApiController 
+    public class ProductsController : BaseApiController
     {
         private readonly IProductRepository productRepository;
         private readonly IGenericRepository<Product> productRepo;
@@ -40,12 +40,12 @@ namespace Skinet.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts(string sort, int? brandId, int? typeId)
+        public async Task<IActionResult> GetProducts([FromQuery] ProductSpecParams productParams)
         {
             //var products = await this.productRepository.GetProductsAsync();
 
             // With specification pattern
-            var spec = new ProductsWithTypesAndBrandsSpecification(sort, brandId, typeId);
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
             var products = await this.productRepo.ListAsync(spec);
 
             // Without automapper
