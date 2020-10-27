@@ -14,6 +14,12 @@ namespace Skinet.Core.Specifications
 
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPagingEnabled { get; private set; }
+
         public BaseSpecification()
         {
         }
@@ -35,6 +41,13 @@ namespace Skinet.Core.Specifications
         protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
         {
             this.OrderByDescending = orderByDescExpression;
+        }
+
+        protected void ApplyPaging(int skip, int take)
+        {
+            this.Skip = skip;
+            this.Take = take;
+            this.IsPagingEnabled = true;
         }
     }
 }
