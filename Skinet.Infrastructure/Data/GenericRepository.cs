@@ -39,6 +39,11 @@ namespace Skinet.Infrastructure.Data
             return await this.ApplySpecification(spec).ToListAsync();
         }
 
+        public Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return this.ApplySpecification(spec).CountAsync();
+        }
+
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(this.context.Set<T>().AsQueryable(), spec);

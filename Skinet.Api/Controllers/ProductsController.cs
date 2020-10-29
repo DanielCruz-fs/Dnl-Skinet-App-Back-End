@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skinet.Api.Dtos;
 using Skinet.Api.Errors;
+using Skinet.Api.Helpers;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
@@ -46,6 +47,8 @@ namespace Skinet.Api.Controllers
 
             // With specification pattern
             var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+            var totalItems = await this.productRepo.CountAsync(countSpec);
             var products = await this.productRepo.ListAsync(spec);
 
             // Without automapper
@@ -59,7 +62,8 @@ namespace Skinet.Api.Controllers
             //    ProductType = p.ProductType.Name
             //}).ToList());
 
-            return Ok(this.mapper.Map<IList<Product>, IList<ProductToReturnDto>>(products));
+            var data = this.mapper.Map<IList<Product>, IList<ProductToReturnDto>>(products);
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id}")]
