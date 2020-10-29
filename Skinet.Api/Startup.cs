@@ -40,6 +40,15 @@ namespace Skinet.Api
             // Call custom class to clean up ConfigureServices
             services.AddApplicationServices();
 
+            // Cors
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +72,8 @@ namespace Skinet.Api
 
             //Serving static content from API
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
