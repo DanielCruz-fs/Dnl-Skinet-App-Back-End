@@ -17,6 +17,7 @@ namespace Skinet.Infrastructure.Data
         {
             try
             {
+                // ProductBrands
                 if (!storeContext.ProductBrands.Any())
                 {
                     var brandsData = File.ReadAllText("../Skinet.Infrastructure/Data/SeedData/brands.json");
@@ -30,10 +31,11 @@ namespace Skinet.Infrastructure.Data
                     await storeContext.SaveChangesAsync();
                 }
 
+                // ProductTypes
                 if (!storeContext.ProductTypes.Any())
                 {
                     var typesData = File.ReadAllText("../Skinet.Infrastructure/Data/SeedData/types.json");
-                    var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
+                    var types = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProductType>>(typesData);
 
                     foreach (var item in types)
                     {
