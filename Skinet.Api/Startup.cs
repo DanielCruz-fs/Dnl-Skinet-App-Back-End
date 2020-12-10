@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Skinet.Api.Errors;
 using Skinet.Api.Extensions;
+using StackExchange.Redis;
 
 namespace Skinet.Api
 {
@@ -33,6 +34,13 @@ namespace Skinet.Api
             services.AddControllers();
 
             services.AddDbContext<StoreContext>(options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+
+            // Redis: the connection is designed to be shared and reused between callers and is fully thread safe and ready
+            // for less particular usage
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var config = ConfigurationOptions.Parse(this.configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(config);
+            });
 
             // Injecting automapper, it is different 'cause its version 8.1
             services.AddAutoMapper(typeof(MappingProfiles));

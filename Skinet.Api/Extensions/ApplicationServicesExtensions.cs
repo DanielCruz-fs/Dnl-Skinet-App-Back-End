@@ -19,7 +19,11 @@ namespace Skinet.Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // Common injection services
             services.AddScoped<IProductRepository, ProductRepository>();
+            // Redis injection repository
+            services.AddScoped<IBasketRepository, BasketRepository>();
+
             // Injecting a generic service
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
